@@ -19,8 +19,9 @@ const {
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
     // Create working directory for this request
-    const { workDir } = createWorkingDir();
+    const { workDir, requestId } = createWorkingDir();
     req.workDir = workDir;
+    req.requestId = requestId;
     cb(null, workDir);
   },
   filename: function (req, file, cb) {
@@ -148,9 +149,14 @@ router.post('/transcode-and-split', upload.single('file'), async (req, res, next
 
       totalSize += stats.size;
 
+      // Create a publicly accessible URL for the file
+      const serverUrl = req.app.locals.serverUrl;
+      const publicPath = filePath.replace(/\\/g, '/'); // Fix Windows paths
+      const publicUrl = `${serverUrl}${publicPath.substring(publicPath.indexOf('/tmp'))}`;
+
       outputFiles.push({
         fileName,
-        absPathOrUrl: filePath, // Use absolute path
+        absPathOrUrl: publicUrl, // Use public URL
         durationSec: fileDuration,
         sizeBytes: stats.size
       });
@@ -172,7 +178,7 @@ router.post('/transcode-and-split', upload.single('file'), async (req, res, next
       output: {
         codec: "libopus",
         container: "webm",
-        baseDir: outDir,
+        baseDir: req.app.locals.serverUrl + outDir.substring(outDir.indexOf('/tmp')),
         files: outputFiles
       },
       stats: {

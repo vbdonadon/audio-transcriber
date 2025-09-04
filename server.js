@@ -1,5 +1,6 @@
 const express = require('express');
 const path = require('path');
+const os = require('os');
 const transcodeRoutes = require('./routes/transcode');
 
 // Create Express app
@@ -8,6 +9,9 @@ const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
+
+// Serve temporary files - make audio files accessible
+app.use('/tmp', express.static(os.tmpdir()));
 
 // Routes
 app.use('/', transcodeRoutes);
@@ -27,9 +31,13 @@ app.use((err, req, res, next) => {
   res.status(statusCode).json(response);
 });
 
+// Define server URL (for public access to files)
+const SERVER_URL = process.env.SERVER_URL || 'https://audio-transcriber-rlqi.onrender.com';
+app.locals.serverUrl = SERVER_URL;
+
 // Start server
 app.listen(PORT, '0.0.0.0', () => {
   console.log(`Server running on port ${PORT}`);
   console.log(`Server accessible at http://localhost:${PORT}`);
-  console.log(`For external access, use your machine's IP address`);
+  console.log(`Public server URL: ${SERVER_URL}`);
 });

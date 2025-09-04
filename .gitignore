@@ -1,0 +1,63 @@
+# Dependências
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Arquivos temporários de áudio/vídeo
+*.mp3
+*.wav
+*.mp4
+*.webm
+*.m4a
+*.mkv
+*.opus
+*.ogg
+
+# Diretórios temporários
+/tmp/
+temp/
+.temp/
+dist/
+uploads/
+
+# Ambiente
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Sistema operacional
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# IDE / Editores
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.project
+.classpath
+.settings/
+*.sublime-workspace
+*.sublime-project
+.vs/
+
+# Arquivos de build
+build/
+out/
+dist/
